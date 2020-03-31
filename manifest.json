@@ -1,8 +1,14 @@
 {
-  "name": "Getting Started Example",
+  "name": "Leetcode Spaced Repetition",
   "version": "1.0",
-  "description": "Build an Extension!",
-  "permissions": ["activeTab","storage","declarativeContent","tabs", "<all_urls>"],
+  "description": "Spaced Repetition for memorisation using leetcode",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "declarativeContent",
+    "tabs",
+    "<all_urls>"
+  ],
   "background": {
     "scripts": ["background.js"],
     "persistent": false

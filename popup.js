@@ -16,14 +16,19 @@ function onWindowLoad() {
     var currentUrl= tabs[0].url;
     if(currentUrl.startsWith("https://leetcode.com/")) {
       document.getElementsByClassName("other")[0].style.display = "none";
-      var message = document.querySelector('#message');
-      chrome.tabs.executeScript(null, {
-        file: "getPagesSource.js"
-      }, function() {
-        if (chrome.runtime.lastError) {
-          message.innerText = 'There was an error injecting script : \n' + chrome.runtime.lastError.message;
-        }
-      });
+      if (currentUrl.startsWith("https://leetcode.com/problems")) {
+
+      }
+      else {
+        var message = document.querySelector('#message');
+        chrome.tabs.executeScript(null, {
+          file: "getPagesSource.js"
+        }, function () {
+          if (chrome.runtime.lastError) {
+            message.innerText = 'There was an error injecting script : \n' + chrome.runtime.lastError.message;
+          }
+        });
+      }
     }
     else {
       document.getElementsByClassName("leetcode")[0].style.display = "none";

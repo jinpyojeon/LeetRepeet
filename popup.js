@@ -30,15 +30,20 @@ function onWindowLoad() {
               code: "(" + modifyDOM + ")();",
             },
             (results) => {
+              results=results.toString();
               const re = /^(.+?)<\//;
               var problemDetails = re.exec(
-                results
-                  .toString()
-                  .split('<div data-cy="question-title" class="css-v3d350">')[1]
+                results.split('<div data-cy="question-title" class="css-v3d350">')[1]
               )[1];
-              var problemLevel = re.exec(
-                results.toString().split('class="css-dcmtd5">')[1]
-              )[1];
+              var problemLevel='';
+              if(results.includes('css-dcmtd5')) {
+                problemLevel = "Medium";
+              } else if(results.includes('css-14oi08n')) {
+                problemLevel = "Easy";
+              }
+              else {
+                problemLevel = "Hard";
+              }
               var problemNumber = problemDetails.split(".")[0].trim();
               var problemDescription = problemDetails.split(".")[1].trim();
               console.log(problemNumber);

@@ -5,7 +5,6 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     const username = re
       .exec(message.innerText.split("https://assets.leetcode.com/users/")[1])[1]
       .trim();
-    console.log(username);
   }
 });
 
@@ -36,29 +35,12 @@ function onWindowLoad() {
                   '<div data-cy="question-title" class="css-v3d350">'
                 )[1]
               )[1];
-              var problemLevel = "";
-              if (results.includes("css-dcmtd5")) {
-                problemLevel = "Medium";
-              } else if (results.includes("css-14oi08n")) {
-                problemLevel = "Easy";
-              } else {
-                problemLevel = "Hard";
-              }
               var problemNumber = problemDetails.split(".")[0].trim();
               var problemDescription = problemDetails.split(".")[1].trim();
-              console.log(problemNumber);
-              console.log(problemDescription);
-              console.log(problemLevel);
+              var problemLevel = determineProblemLevel(results);
             }
           );
-          Date.prototype.addDays = function(days) {
-            var date = new Date(this.valueOf());
-            date.setDate(date.getDate() + days);
-            return date;
-          };
-
-          var date = new Date();
-          date.addDays(180);
+          var date = new Date().addDays(180);
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           var message = document.querySelector("#message");
@@ -82,6 +64,24 @@ function onWindowLoad() {
       }
     }
   );
+}
+
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
+
+function determineProblemLevel(results) {
+  var problemLevel = "";
+  if (results.includes("css-dcmtd5")) {
+    problemLevel = "Medium";
+  } else if (results.includes("css-14oi08n")) {
+    problemLevel = "Easy";
+  } else {
+    problemLevel = "Hard";
+  }
+  return problemLevel;
 }
 
 window.onload = onWindowLoad;

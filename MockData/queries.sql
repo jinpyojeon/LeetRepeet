@@ -1,0 +1,1 @@
+SELECT v.description, v.level from MOCK_DATA as v INNER JOIN ( SELECT Problem from main_db where User = 1 LIMIT 15) as v2 ON v.id=v2.Problem;

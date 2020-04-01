@@ -51,6 +51,14 @@ function onWindowLoad() {
               console.log(problemLevel);
             }
           );
+          Date.prototype.addDays = function(days) {
+            var date = new Date(this.valueOf());
+            date.setDate(date.getDate() + days);
+            return date;
+          };
+
+          var date = new Date();
+          date.addDays(180);
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           var message = document.querySelector("#message");

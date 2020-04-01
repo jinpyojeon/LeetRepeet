@@ -1,5 +1,4 @@
 chrome.runtime.onMessage.addListener(function (request, sender) {
-  // eslint-disable-next-line eqeqeq
   if (request.action === "getSource") {
     message.innerText = request.source;
     const re = /^(.+?)\//;
@@ -30,18 +29,19 @@ function onWindowLoad() {
               code: "(" + modifyDOM + ")();",
             },
             (results) => {
-              results=results.toString();
+              results = results.toString();
               const re = /^(.+?)<\//;
               var problemDetails = re.exec(
-                results.split('<div data-cy="question-title" class="css-v3d350">')[1]
+                results.split(
+                  '<div data-cy="question-title" class="css-v3d350">'
+                )[1]
               )[1];
-              var problemLevel='';
-              if(results.includes('css-dcmtd5')) {
+              var problemLevel = "";
+              if (results.includes("css-dcmtd5")) {
                 problemLevel = "Medium";
-              } else if(results.includes('css-14oi08n')) {
+              } else if (results.includes("css-14oi08n")) {
                 problemLevel = "Easy";
-              }
-              else {
+              } else {
                 problemLevel = "Hard";
               }
               var problemNumber = problemDetails.split(".")[0].trim();

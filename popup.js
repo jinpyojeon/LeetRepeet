@@ -56,6 +56,7 @@ function onWindowLoad() {
       } else {
         document.getElementsByClassName("home")[0].style.display = "none";
         document.getElementsByClassName("problems")[0].style.display = "none";
+        dbstuff();
       }
     }
   );
@@ -104,4 +105,12 @@ function determineProblemNumber(results)
   )[1].split(".")[0].trim();
 }
 
+function dbstuff()
+{
+  alasql("CREATE TABLE IF NOT EXISTS cities (city string, population number)");
+  alasql("INSERT INTO cities VALUES ('Rome',2863223), ('Paris',2249975), ('Berlin',3517424),  ('Madrid',3041579)");
+  alasql("INSERT INTO cities VALUES ('Rome',2863223), ('Paris',2249975), ('Berlin',3517424),  ('Madrid',3041579)");
+  console.log(alasql("Select * from cities"));
+
+}
 window.onload = onWindowLoad;

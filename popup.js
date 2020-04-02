@@ -29,15 +29,10 @@ function onWindowLoad() {
             },
             (results) => {
               results = results.toString();
-              const re = /^(.+?)<\//;
-              var problemDetails = re.exec(
-                results.split(
-                  '<div data-cy="question-title" class="css-v3d350">'
-                )[1]
-              )[1];
-              var problemNumber = problemDetails.split(".")[0].trim();
-              var problemDescription = problemDetails.split(".")[1].trim();
+              var problemNumber = determineProblemNumber(results);
+              var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
+              var problemUsername = determineProblemUsername(results);
             }
           );
           var date = new Date().addDays(180);
@@ -82,6 +77,31 @@ function determineProblemLevel(results) {
     problemLevel = "Hard";
   }
   return problemLevel;
+}
+
+function determineProblemUsername(results){
+  const re2 = /^(.+?)\//;
+  return re2.exec(results.split('class="user-link__2Czf" href="/')[1])[1];
+}
+
+function determineProblemDescription(results)
+{
+  const re = /^(.+?)<\//;
+  return re.exec(
+      results.split(
+          '<div data-cy="question-title" class="css-v3d350">'
+      )[1]
+  )[1].split(".")[1].trim();
+}
+
+function determineProblemNumber(results)
+{
+  const re = /^(.+?)<\//;
+  return re.exec(
+      results.split(
+          '<div data-cy="question-title" class="css-v3d350">'
+      )[1]
+  )[1].split(".")[0].trim();
 }
 
 window.onload = onWindowLoad;

@@ -30,17 +30,13 @@ function onWindowLoad() {
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
               var problemUsername = determineProblemUsername();
-              var date = new Date().addDays(180);
-              console.log(
-                problemNumber +
-                  " " +
-                  problemDescription +
-                  " " +
-                  problemLevel +
-                  " " +
-                  problemUsername +
-                  " " +
-                  date
+              var problemDate = new Date().addDays(179);
+              dbstuff(
+                problemUsername,
+                problemNumber,
+                problemLevel,
+                problemDescription,
+                problemDate
               );
             }
           );
@@ -98,7 +94,7 @@ function determineProblemUsername(results) {
   xhr.send();
 
   var result = JSON.parse(xhr.responseText);
-  return Object.values(result)[0];
+  return Object.values(result)[0].toString();
 }
 
 function determineProblemDescription(results) {
@@ -108,17 +104,106 @@ function determineProblemDescription(results) {
       results.split('<div data-cy="question-title" class="css-v3d350">')[1]
     )[1]
     .split(".")[1]
-    .trim();
+    .trim()
+    .toString();
 }
 
 function determineProblemNumber(results) {
   const re = /^(.+?)<\//;
-  return re
-    .exec(
-      results.split('<div data-cy="question-title" class="css-v3d350">')[1]
-    )[1]
-    .split(".")[0]
-    .trim();
+  return parseInt(
+    re
+      .exec(
+        results.split('<div data-cy="question-title" class="css-v3d350">')[1]
+      )[1]
+      .split(".")[0]
+      .trim()
+  );
+}
+
+function dbstuff(
+  problemUsername,
+  problemNumber,
+  problemLevel,
+  problemDescription,
+  problemDate
+) {
+  createTables();
+  insertData(
+    problemUsername,
+    problemNumber,
+    problemLevel,
+    problemDescription,
+    problemDate
+  );
+  console.log(alasql("SELECT * FROM Information"));
+}
+
+function createTables() {
+  alasql("CREATE LOCALSTORAGE DATABASE IF NOT EXISTS main_db");
+  alasql("ATTACH LOCALSTORAGE DATABASE main_db");
+  alasql("USE main_db");
+  alasql(
+    "CREATE TABLE IF NOT EXISTS Information (problemUsername STRING, problemNumber NUMBER, problemLevel STRING, problemDescription STRING, problemDate DATE )"
+  );
+}
+
+function insertData(
+  problemUsername,
+  problemNumber,
+  problemLevel,
+  problemDescription,
+  problemDate
+) {
+  var ifExists = alasql(
+    "SELECT VALUE COUNT(*) FROM Information WHERE problemUsername = ? AND problemNumber = ?",
+    [problemUsername, problemNumber]
+  );
+  if (ifExists > 0) {
+    updateRecord(
+      problemUsername,
+      problemNumber,
+      problemLevel,
+      problemDescription,
+      problemDate
+    );
+  } else {
+    insertNewRecord(
+      problemUsername,
+      problemNumber,
+      problemLevel,
+      problemDescription,
+      problemDate
+    );
+  }
+}
+
+function insertNewRecord(
+  problemUsername,
+  problemNumber,
+  problemLevel,
+  problemDescription,
+  problemDate
+) {
+  alasql("INSERT INTO Information VALUES(?, ?, ?, ?,?)", [
+    problemUsername,
+    problemNumber,
+    problemLevel,
+    problemDescription,
+    problemDate,
+  ]);
+}
+
+function updateRecord(
+  problemUsername,
+  problemNumber,
+  problemLevel,
+  problemDescription,
+  problemDate
+) {
+  alasql(
+    "UPDATE Information SET problemDate = ? WHERE problemUsername = ? AND problemNumber = ?",
+    [problemDate, problemUsername, problemNumber]
+  );
 }
 
 window.onload = onWindowLoad;

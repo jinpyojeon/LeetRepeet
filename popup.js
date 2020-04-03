@@ -20,9 +20,6 @@ function onWindowLoad() {
         document.getElementsByClassName("other")[0].style.display = "none";
         if (currentUrl.startsWith("https://leetcode.com/problems/")) {
           document.getElementsByClassName("home")[0].style.display = "none";
-          function modifyDOM() {
-            return document.body.innerHTML;
-          }
           chrome.tabs.executeScript(
             {
               code: "(" + modifyDOM + ")();",
@@ -32,10 +29,21 @@ function onWindowLoad() {
               var problemNumber = determineProblemNumber(results);
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
-              var problemUsername = determineProblemUsername(results);
+              var problemUsername = determineProblemUsername();
+              var date = new Date().addDays(180);
+              console.log(
+                problemNumber +
+                  " " +
+                  problemDescription +
+                  " " +
+                  problemLevel +
+                  " " +
+                  problemUsername +
+                  " " +
+                  date
+              );
             }
           );
-          var date = new Date().addDays(180);
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           var message = document.querySelector("#message");
@@ -61,6 +69,10 @@ function onWindowLoad() {
   );
 }
 
+function modifyDOM() {
+  return document.body.innerHTML;
+}
+
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -79,29 +91,34 @@ function determineProblemLevel(results) {
   return problemLevel;
 }
 
-function determineProblemUsername(results){
-  const re2 = /^(.+?)\//;
-  return re2.exec(results.split('class="user-link__2Czf" href="/')[1])[1];
+function determineProblemUsername(results) {
+  var xhr = new XMLHttpRequest();
+
+  xhr.open("GET", "https://leetcode.com/api/problems/algorithms/", false);
+  xhr.send();
+
+  var result = JSON.parse(xhr.responseText);
+  return Object.values(result)[0];
 }
 
-function determineProblemDescription(results)
-{
+function determineProblemDescription(results) {
   const re = /^(.+?)<\//;
-  return re.exec(
-      results.split(
-          '<div data-cy="question-title" class="css-v3d350">'
-      )[1]
-  )[1].split(".")[1].trim();
+  return re
+    .exec(
+      results.split('<div data-cy="question-title" class="css-v3d350">')[1]
+    )[1]
+    .split(".")[1]
+    .trim();
 }
 
-function determineProblemNumber(results)
-{
+function determineProblemNumber(results) {
   const re = /^(.+?)<\//;
-  return re.exec(
-      results.split(
-          '<div data-cy="question-title" class="css-v3d350">'
-      )[1]
-  )[1].split(".")[0].trim();
+  return re
+    .exec(
+      results.split('<div data-cy="question-title" class="css-v3d350">')[1]
+    )[1]
+    .split(".")[0]
+    .trim();
 }
 
 window.onload = onWindowLoad;

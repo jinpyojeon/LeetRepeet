@@ -19,7 +19,6 @@ function onWindowLoad() {
       if (currentUrl.startsWith("https://leetcode.com/")) {
         changeIcon();
         createTables();
-        generateHomeScreen();
         document.getElementsByClassName("other")[0].style.display = "none";
         if (currentUrl.startsWith("https://leetcode.com/problems/")) {
           document.getElementsByClassName("home")[0].style.display = "none";
@@ -33,7 +32,7 @@ function onWindowLoad() {
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
               var problemUsername = determineProblemUsername();
-              var problemDate = new Date().addDays(1);
+              var problemDate = new Date().addDays(-2);
               dbstuff(
                 problemUsername,
                 problemNumber,
@@ -44,6 +43,7 @@ function onWindowLoad() {
             }
           );
         } else {
+          generateHomeScreen();
           document.getElementsByClassName("problems")[0].style.display = "none";
           var message = document.querySelector("#message");
           chrome.tabs.executeScript(
@@ -209,42 +209,45 @@ function updateRecord(
   );
 }
 
-function changeIcon()
-{
+function changeIcon() {
   chrome.browserAction.setIcon({
-    path : {
+    path: {
       "16": "images/16x16light.png",
       "32": "images/32x32light.png",
       "48": "images/48x48light.png",
-      "128": "images/128x128light.png"
-    }
+      "128": "images/128x128light.png",
+    },
   });
 }
 
-function changeIcon2()
-{
+function changeIcon2() {
   chrome.browserAction.setIcon({
-    path : {
+    path: {
       "16": "images/16x16dark.png",
       "32": "images/32x32dark.png",
       "48": "images/48x48dark.png",
-      "128": "images/128x128dark.png"
-    }
+      "128": "images/128x128dark.png",
+    },
   });
 }
 
-function generateHomeScreen()
-{
-  var currentDate=new Date().toISOString();
-  var lowerLimit=new Date();
+function generateHomeScreen() {
+  var currentDate = new Date().toISOString();
+  var lowerLimit = new Date();
   lowerLimit.setHours(lowerLimit.getHours() - 12);
-  lowerLimit=lowerLimit.toISOString();
-  var upperLimit=new Date();
+  lowerLimit = lowerLimit.toISOString();
+  var upperLimit = new Date();
   upperLimit.setHours(upperLimit.getHours() + 30);
-  upperLimit=upperLimit.toISOString();
-  console.log(currentDate);
-  console.log(lowerLimit);
-  console.log(upperLimit);
-  console.log(alasql("SELECT * FROM Information WHERE problemDate > ? AND problemDate < ?",[lowerLimit,upperLimit]));
+  upperLimit = upperLimit.toISOString();
+  rescheduleLower(lowerLimit);
+}
+
+function rescheduleLower(lowerLimit) {
+  var newDate = new Date().addDays(1);
+  alasql("UPDATE Information SET problemDate = ? WHERE problemDate < ?", [
+    newDate,
+    lowerLimit,
+  ]);
+  console.log(alasql("SELECT * FROM Information"));
 }
 window.onload = onWindowLoad;

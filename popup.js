@@ -18,6 +18,8 @@ function onWindowLoad() {
       var currentUrl = tabs[0].url;
       if (currentUrl.startsWith("https://leetcode.com/")) {
         changeIcon();
+        createTables();
+        generateHomeScreen();
         document.getElementsByClassName("other")[0].style.display = "none";
         if (currentUrl.startsWith("https://leetcode.com/problems/")) {
           document.getElementsByClassName("home")[0].style.display = "none";
@@ -31,7 +33,7 @@ function onWindowLoad() {
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
               var problemUsername = determineProblemUsername();
-              var problemDate = new Date().addDays(179);
+              var problemDate = new Date().addDays(1);
               dbstuff(
                 problemUsername,
                 problemNumber,
@@ -129,7 +131,6 @@ function dbstuff(
   problemDescription,
   problemDate
 ) {
-  createTables();
   insertData(
     problemUsername,
     problemNumber,
@@ -232,4 +233,18 @@ function changeIcon2()
   });
 }
 
+function generateHomeScreen()
+{
+  var currentDate=new Date().toISOString();
+  var lowerLimit=new Date();
+  lowerLimit.setHours(lowerLimit.getHours() - 12);
+  lowerLimit=lowerLimit.toISOString();
+  var upperLimit=new Date();
+  upperLimit.setHours(upperLimit.getHours() + 30);
+  upperLimit=upperLimit.toISOString();
+  console.log(currentDate);
+  console.log(lowerLimit);
+  console.log(upperLimit);
+  console.log(alasql("SELECT * FROM Information WHERE problemDate > ? AND problemDate < ?",[lowerLimit,upperLimit]));
+}
 window.onload = onWindowLoad;

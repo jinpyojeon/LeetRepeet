@@ -4,3 +4,4 @@ select v.description, v.level from MOCK_DATA as v INNER JOIN ( select Problem fr
 ---- console.log(alasql("SELECT * FROM Information WHERE problemDate > ?",[date.toISOString()]));
 ---- var x=alasql('SELECT VALUE problemDate FROM Information WHERE problemDate > ?',[date.toISOString()]);
 ---- console.log(new Date(x));
+--  console.log(alasql("SELECT * FROM Information WHERE problemDate > ? AND problemDate < ?",[lowerLimit,upperLimit]));

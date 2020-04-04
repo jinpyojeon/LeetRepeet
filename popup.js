@@ -17,6 +17,7 @@ function onWindowLoad() {
     function (tabs) {
       var currentUrl = tabs[0].url;
       if (currentUrl.startsWith("https://leetcode.com/")) {
+        changeIcon();
         document.getElementsByClassName("other")[0].style.display = "none";
         if (currentUrl.startsWith("https://leetcode.com/problems/")) {
           document.getElementsByClassName("home")[0].style.display = "none";
@@ -58,6 +59,7 @@ function onWindowLoad() {
           );
         }
       } else {
+        changeIcon2();
         document.getElementsByClassName("home")[0].style.display = "none";
         document.getElementsByClassName("problems")[0].style.display = "none";
       }
@@ -204,6 +206,30 @@ function updateRecord(
     "UPDATE Information SET problemDate = ? WHERE problemUsername = ? AND problemNumber = ?",
     [problemDate, problemUsername, problemNumber]
   );
+}
+
+function changeIcon()
+{
+  chrome.browserAction.setIcon({
+    path : {
+      "16": "images/16x16light.png",
+      "32": "images/32x32light.png",
+      "48": "images/48x48light.png",
+      "128": "images/128x128light.png"
+    }
+  });
+}
+
+function changeIcon2()
+{
+  chrome.browserAction.setIcon({
+    path : {
+      "16": "images/16x16dark.png",
+      "32": "images/32x32dark.png",
+      "48": "images/48x48dark.png",
+      "128": "images/128x128dark.png"
+    }
+  });
 }
 
 window.onload = onWindowLoad;

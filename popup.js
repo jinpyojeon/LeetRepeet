@@ -239,6 +239,10 @@ function generateHomeScreen() {
   var upperLimit = new Date();
   upperLimit.setHours(upperLimit.getHours() + 30);
   upperLimit = upperLimit.toISOString();
+  var arr = alasql("SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? LIMIT 5",[lowerLimit,upperLimit]);
+  var arrayToString = JSON.stringify(Object.assign({}, arr));  // convert array to string
+  var stringToJsonObject = JSON.parse(arrayToString);  // convert string to json object
+  console.log(stringToJsonObject);
   rescheduleLower(lowerLimit);
 }
 
@@ -248,6 +252,6 @@ function rescheduleLower(lowerLimit) {
     newDate,
     lowerLimit,
   ]);
-  console.log(alasql("SELECT * FROM Information"));
+  var update=alasql("SELECT * FROM Information");
 }
 window.onload = onWindowLoad;

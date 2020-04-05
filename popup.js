@@ -1,13 +1,3 @@
-chrome.runtime.onMessage.addListener(function (request, sender) {
-  if (request.action === "getSource") {
-    message.innerText = request.source;
-    const re = /^(.+?)\//;
-    const username = re
-      .exec(message.innerText.split("https://assets.leetcode.com/users/")[1])[1]
-      .trim();
-  }
-});
-
 function onWindowLoad() {
   chrome.tabs.query(
     {
@@ -43,8 +33,27 @@ function onWindowLoad() {
             }
           );
         } else {
-          generateHomeScreen();
           document.getElementsByClassName("problems")[0].style.display = "none";
+          chrome.runtime.onMessage.addListener(function (request, sender) {
+            var username;
+            if (request.action === "getSource") {
+              message.innerText = request.source;
+              const re = /^(.+?)\//;
+              username = re
+                .exec(
+                  message.innerText.split(
+                    "https://assets.leetcode.com/users/"
+                  )[1]
+                )[1]
+                .trim()
+                .toString();
+            }
+            if (username != "") {
+              generateHomeScreen(username);
+            } else {
+              console.log("Display screen asking to log in ");
+            }
+          });
           var message = document.querySelector("#message");
           chrome.tabs.executeScript(
             null,
@@ -231,7 +240,7 @@ function changeIcon2() {
   });
 }
 
-function generateHomeScreen() {
+function generateHomeScreen(username) {
   var currentDate = new Date().toISOString();
   var lowerLimit = new Date();
   lowerLimit.setHours(lowerLimit.getHours() - 12);
@@ -239,10 +248,25 @@ function generateHomeScreen() {
   var upperLimit = new Date();
   upperLimit.setHours(upperLimit.getHours() + 30);
   upperLimit = upperLimit.toISOString();
-  var arr = alasql("SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? LIMIT 5",[lowerLimit,upperLimit]);
-  var arrayToString = JSON.stringify(Object.assign({}, arr));  // convert array to string
-  var stringToJsonObject = JSON.parse(arrayToString);  // convert string to json object
-  console.log(stringToJsonObject);
+  var arr = alasql(
+    "SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? AND problemUsername = ? LIMIT 5",
+    [lowerLimit, upperLimit, username]
+  );
+  var arrayToString = JSON.stringify(Object.assign({}, arr)); // convert array to string
+  var stringToJsonObject = JSON.parse(arrayToString); // convert string to json object
+  if (Object.keys(stringToJsonObject).length == 0) {
+    console.log(
+      "Well Done! No questions to revisit today. Do some more or take a break!"
+    );
+  } else {
+    var obj;
+    for (obj in stringToJsonObject) {
+      console.log(stringToJsonObject[obj].problemDescription);
+    }
+    document.getElementsByClassName(
+      "problemscreen"
+    )[0].innerHTML = getProblemMarkup();
+  }
   rescheduleLower(lowerLimit);
 }
 
@@ -252,6 +276,13 @@ function rescheduleLower(lowerLimit) {
     newDate,
     lowerLimit,
   ]);
-  var update=alasql("SELECT * FROM Information");
+  var update = alasql("SELECT * FROM Information");
+}
+
+function getProblemMarkup() {
+  return `<ul id="menu">
+    <li>Home</li>
+    <li>Services</li>
+    </ul>`;
 }
 window.onload = onWindowLoad;

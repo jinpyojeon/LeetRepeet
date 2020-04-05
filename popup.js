@@ -254,18 +254,13 @@ function generateHomeScreen(username) {
   );
   var arrayToString = JSON.stringify(Object.assign({}, arr)); // convert array to string
   var stringToJsonObject = JSON.parse(arrayToString); // convert string to json object
-  if (Object.keys(stringToJsonObject).length == 0) {
+  if ((Object.keys(stringToJsonObject).length = 0)) {
     console.log(
       "Well Done! No questions to revisit today. Do some more or take a break!"
     );
   } else {
-    var obj;
-    for (obj in stringToJsonObject) {
-      console.log(stringToJsonObject[obj].problemDescription);
-    }
-    document.getElementsByClassName(
-      "problemscreen"
-    )[0].innerHTML = getProblemMarkup();
+    var listItem = getProblemMarkup(stringToJsonObject);
+    document.getElementsByClassName("problemscreen")[0].innerHTML = listItem;
   }
   rescheduleLower(lowerLimit);
 }
@@ -279,10 +274,12 @@ function rescheduleLower(lowerLimit) {
   var update = alasql("SELECT * FROM Information");
 }
 
-function getProblemMarkup() {
-  return `<ul id="menu">
-    <li>Home</li>
-    <li>Services</li>
-    </ul>`;
+function getProblemMarkup(jsonobj) {
+  var txt = "<ul class='problemitems'>";
+  var obj;
+  for (obj in jsonobj) {
+    txt += "<li>" + jsonobj[obj].problemDescription + "</li>";
+  }
+  return txt;
 }
 window.onload = onWindowLoad;

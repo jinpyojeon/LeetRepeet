@@ -266,9 +266,10 @@ function generateHomeScreen(username) {
   );
   var arrayToString = JSON.stringify(Object.assign({}, arr)); // convert array to string
   var stringToJsonObject = JSON.parse(arrayToString); // convert string to json object
-  if ((Object.keys(stringToJsonObject).length = 0)) {
+  console.log(Object.keys(stringToJsonObject).length);
+  if (Object.keys(stringToJsonObject).length == 0) {
     console.log(
-      "Well Done! No questions to revisit today. Do some more or take a break!"
+      "Set the content inside the div to Well Done! No questions to revisit today. Do some more or take a break!"
     );
   } else {
     var listItem = getProblemMarkup(stringToJsonObject);

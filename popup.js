@@ -22,7 +22,7 @@ function onWindowLoad() {
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
               var problemUsername = determineProblemUsername();
-              var problemDate = new Date().addDays(-2);
+              var problemDate = new Date().addDays(-1);
               dbstuff(
                 problemUsername,
                 problemNumber,
@@ -48,6 +48,7 @@ function onWindowLoad() {
                 .trim()
                 .toString();
             }
+            console.log(username);
             if (username != "") {
               generateHomeScreen(username);
             } else {
@@ -187,6 +188,7 @@ function insertData(
       problemDate
     );
   }
+  console.log(alasql("SELECT * FROM Information"));
 }
 
 function insertNewRecord(

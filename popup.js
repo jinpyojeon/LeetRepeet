@@ -82,6 +82,7 @@ function onWindowLoad() {
         }
       } else {
         changeIcon2();
+        document.getElementsByClassName("loginErrorWrapper")[0].style.display = "none";
         document.getElementsByClassName("home")[0].style.display = "none";
         document.getElementsByClassName("problems")[0].style.display = "none";
       }

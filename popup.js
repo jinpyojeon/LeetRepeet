@@ -12,6 +12,7 @@ function onWindowLoad() {
         document.getElementsByClassName("other")[0].style.display = "none";
         if (currentUrl.startsWith("https://leetcode.com/problems/")) {
           document.getElementsByClassName("home")[0].style.display = "none";
+          document.getElementsByClassName("loginErrorWrapper")[0].style.display = "none";
           chrome.tabs.executeScript(
             {
               code: "(" + modifyDOM + ")();",
@@ -35,24 +36,30 @@ function onWindowLoad() {
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           chrome.runtime.onMessage.addListener(function (request, sender) {
-            var username;
+            var username="";
             if (request.action === "getSource") {
               message.innerText = request.source;
               const re = /^(.+?)\//;
-              username = re
-                .exec(
-                  message.innerText.split(
-                    "https://assets.leetcode.com/users/"
-                  )[1]
-                )[1]
-                .trim()
-                .toString();
+              try{
+                username = re
+                    .exec(
+                        message.innerText.split(
+                            "https://assets.leetcode.com/users/"
+                        )[1]
+                    )[1]
+                    .trim()
+                    .toString();
+              }
+              catch(err)
+              {
+                console.log("Display ui asking to login to this website");
+                document.getElementsByClassName("extension")[0].style.display = "none";
+              }
             }
             console.log(username);
             if (username != "") {
+              document.getElementsByClassName("loginErrorWrapper")[0].style.display = "none";
               generateHomeScreen(username);
-            } else {
-              console.log("Display screen asking to log in ");
             }
           });
           var message = document.querySelector("#message");

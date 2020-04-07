@@ -61,6 +61,13 @@ function onWindowLoad() {
                             setTimeout(resolve, 1000)
                           );
                         }
+                        document.getElementsByClassName(
+                          "problems"
+                        )[0].style.display = "none";
+                        document.getElementsByClassName(
+                          "success"
+                        )[0].innerHTML =
+                          '<div style="height: 34px;width: 410px"><img class="logo" src="images/32x32dark.png"/> <b class="Heading">We got it 👌</b></div>';
                         dbstuff(
                           problemUsername,
                           problemNumber,

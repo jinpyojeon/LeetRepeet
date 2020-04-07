@@ -1,3 +1,6 @@
+var problemDate;
+var parent = document.getElementById("buttons");
+parent.addEventListener("click", myFunction);
 function onWindowLoad() {
   chrome.tabs.query(
     {
@@ -31,9 +34,9 @@ function onWindowLoad() {
                 var problemNumber = determineProblemNumber(results);
                 var problemDescription = determineProblemDescription(results);
                 var problemLevel = determineProblemLevel(results);
-                var problemDate = new Date().addDays(-1);
-                document.getElementsByClassName("problemHeader")[0].innerHTML =
-                  '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b>';
+                document.getElementsByClassName(
+                  "problemHeader"
+                )[0].innerHTML = getProblemHeader();
                 document.getElementsByClassName(
                   "problemDescription"
                 )[0].innerHTML = getProblemDescription(
@@ -52,14 +55,12 @@ function onWindowLoad() {
                     }
                     response.json().then(function (data) {
                       var problemUsername = data.user_name.toString();
-                      if (problemUsername == "") {
-                        document.getElementsByClassName(
-                          "problems"
-                        )[0].style.display = "none";
-                        document.getElementsByClassName(
-                          "loginErrorWrapper"
-                        )[0].style.display = "block";
-                      } else {
+                      (async () => {
+                        while (typeof problemDate == "undefined") {
+                          await new Promise((resolve) =>
+                            setTimeout(resolve, 1000)
+                          );
+                        }
                         dbstuff(
                           problemUsername,
                           problemNumber,
@@ -67,7 +68,7 @@ function onWindowLoad() {
                           problemDescription,
                           problemDate
                         );
-                      }
+                      })();
                     });
                   })
                   .catch(function (err) {
@@ -205,28 +206,36 @@ function insertData(
   problemDescription,
   problemDate
 ) {
-  var ifExists = alasql(
-    "SELECT VALUE COUNT(*) FROM Information WHERE problemUsername = ? AND problemNumber = ?",
-    [problemUsername, problemNumber]
-  );
-  if (ifExists > 0) {
-    updateRecord(
-      problemUsername,
-      problemNumber,
-      problemLevel,
-      problemDescription,
-      problemDate
+  if (problemDate == "x") {
+    var output = alasql(
+      "DELETE FROM Information WHERE problemUsername = ? AND problemNumber = ?",
+      [problemUsername, problemNumber]
     );
+    console.log(alasql("SELECT * FROM Information"));
   } else {
-    insertNewRecord(
-      problemUsername,
-      problemNumber,
-      problemLevel,
-      problemDescription,
-      problemDate
+    var ifExists = alasql(
+      "SELECT VALUE COUNT(*) FROM Information WHERE problemUsername = ? AND problemNumber = ?",
+      [problemUsername, problemNumber]
     );
+    if (ifExists > 0) {
+      updateRecord(
+        problemUsername,
+        problemNumber,
+        problemLevel,
+        problemDescription,
+        problemDate
+      );
+    } else {
+      insertNewRecord(
+        problemUsername,
+        problemNumber,
+        problemLevel,
+        problemDescription,
+        problemDate
+      );
+    }
+    console.log(alasql("SELECT * FROM Information"));
   }
-  console.log(alasql("SELECT * FROM Information"));
 }
 
 function insertNewRecord(
@@ -404,6 +413,30 @@ function getProblemDescription(
       problemDescription +
       "</strong>"
     );
+}
+function getProblemHeader() {
+  return '<img class="logo" src="images/32x32dark.png"/> <b class="Heading">Time to <strong>REPEET</strong> 💪</b>';
+}
+
+function myFunction(event) {
+  var x = event.target.id;
+  switch (x) {
+    case "3":
+      problemDate = new Date().addDays(3);
+      break;
+    case "7":
+      problemDate = new Date().addDays(7);
+      break;
+    case "15":
+      problemDate = new Date().addDays(15);
+      break;
+    case "30":
+      problemDate = new Date().addDays(30);
+      break;
+    case "0":
+      problemDate = "x";
+      break;
+  }
 }
 
 window.onload = onWindowLoad;

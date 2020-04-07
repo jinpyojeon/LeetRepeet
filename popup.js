@@ -370,42 +370,39 @@ function getProblemDescription(
   var txt;
   if (problemLevel == "Easy")
     return (
-      '<div><span class="label label-success round">' +
+      '<div class="problemLevel"><span class="label label-success round">' +
       problemLevel +
       "</span>" +
-      "<span>" +
+      '<span class="problemNumber">' +
       problemNumber +
       "</span></div>" +
-      "</span>" +
-      "<span>" +
+      "<strong>" +
       problemDescription +
-      "</span>"
+      "</strong>"
     );
   else if (problemLevel == "Medium")
     return (
-      '<div><span class="label label-warning round">' +
+      '<div class="problemLevel"><span class="label label-warning round">' +
       problemLevel +
       "</span>" +
-      "<span>" +
+      '<span class="problemNumber">' +
       problemNumber +
       "</span></div>" +
-      "</span>" +
-      "<span>" +
+      "<strong>" +
       problemDescription +
-      "</span>"
+      "</strong>"
     );
   else
     return (
-      '<div><span class="label label-danger round">' +
+      '<div class="problemLevel"><span class="label label-danger round">' +
       problemLevel +
       "</span>" +
-      "<span>" +
+      '<span class="problemNumber">' +
       problemNumber +
       "</span></div>" +
-      "</span>" +
-      "<span>" +
+      "<strong>" +
       problemDescription +
-      "</span>"
+      "</strong>"
     );
 }
 

@@ -56,6 +56,12 @@ ul{
 .problemitems{
   padding-left: 5px;
 }
+.problemNumber{
+  font-weight: bold;
+}
+.problemLevel{
+  padding-bottom: 12px;
+}
 strong{
   color: #FCC201;
 }

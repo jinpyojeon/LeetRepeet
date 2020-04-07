@@ -7,6 +7,10 @@
 .other b{font-size: 14px}
 .loginErrorWrapper b{font-size: 14px}
 .home{
+   width: max-content;
+   height: max-content
+ }
+.problems{
   width: max-content;
   height: max-content
 }

@@ -1,6 +1,6 @@
 {
   "name": "Leetcode Spaced Repetition",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Spaced Repetition for memorisation using leetcode",
   "permissions": [
     "activeTab",

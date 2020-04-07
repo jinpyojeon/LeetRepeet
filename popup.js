@@ -15,28 +15,52 @@ function onWindowLoad() {
           document.getElementsByClassName(
             "loginErrorWrapper"
           )[0].style.display = "none";
-          chrome.tabs.executeScript(
-            {
-              code: "(" + modifyDOM + ")();",
-            },
-            (results) => {
-              results = results.toString();
-              var problemNumber = determineProblemNumber(results);
-              var problemDescription = determineProblemDescription(results);
-              var problemLevel = determineProblemLevel(results);
-              document.getElementsByClassName("problemHeader")[0].innerHTML = '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b> <br>';
-              document.getElementsByClassName("problemDescription")[0].innerHTML = problemLevel;
-              var problemUsername = determineProblemUsername();
-              var problemDate = new Date().addDays(-1);
-              dbstuff(
-                problemUsername,
-                problemNumber,
-                problemLevel,
-                problemDescription,
-                problemDate
-              );
-            }
-          );
+          chrome.tabs
+            .executeScript(
+              {
+                code: "(" + modifyDOM + ")();",
+              },
+              (results) => {
+                results = results.toString();
+                var problemNumber = determineProblemNumber(results);
+                var problemDescription = determineProblemDescription(results);
+                var problemLevel = determineProblemLevel(results);
+                var problemDate = new Date().addDays(-1);
+                document.getElementsByClassName("problemHeader")[0].innerHTML =
+                  '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b>';
+                document.getElementsByClassName(
+                  "problemDescription"
+                )[0].innerHTML = getProblemDescription(
+                  problemNumber,
+                  problemDescription,
+                  problemLevel
+                );
+                fetch("https://leetcode.com/api/problems/algorithms/").then(
+                  function (response) {
+                    if (response.status !== 200) {
+                      console.log(
+                        "Looks like there was a problem. Status Code: " +
+                          response.status
+                      );
+                      return;
+                    }
+                    response.json().then(function (data) {
+                      var problemUsername = data.user_name.toString();
+                      dbstuff(
+                        problemUsername,
+                        problemNumber,
+                        problemLevel,
+                        problemDescription,
+                        problemDate
+                      );
+                    });
+                  }
+                );
+              }
+            )
+            .catch(function (err) {
+              console.log("Fetch Error :-S", err);
+            });
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           chrome.runtime.onMessage.addListener(function (request, sender) {
@@ -46,11 +70,8 @@ function onWindowLoad() {
               const re = /^(.+?)\',/;
               try {
                 username = re
-                  .exec(
-                    message.innerText.split(
-                      "userSlug:"
-                    )[1]
-                  )[1].replace('\'',' ')
+                  .exec(message.innerText.split("userSlug:")[1])[1]
+                  .replace("'", " ")
                   .trim()
                   .toString();
               } catch (err) {
@@ -82,7 +103,8 @@ function onWindowLoad() {
         }
       } else {
         changeIcon2();
-        document.getElementsByClassName("loginErrorWrapper")[0].style.display = "none";
+        document.getElementsByClassName("loginErrorWrapper")[0].style.display =
+          "none";
         document.getElementsByClassName("home")[0].style.display = "none";
         document.getElementsByClassName("problems")[0].style.display = "none";
       }
@@ -110,16 +132,6 @@ function determineProblemLevel(results) {
     problemLevel = "Hard";
   }
   return problemLevel;
-}
-
-function determineProblemUsername(results) {
-  var xhr = new XMLHttpRequest();
-
-  xhr.open("GET", "https://leetcode.com/api/problems/algorithms/", true);
-  xhr.send();
-
-  var result = JSON.parse(xhr.responseText);
-  return Object.values(result)[0].toString();
 }
 
 function determineProblemDescription(results) {
@@ -269,7 +281,9 @@ function generateHomeScreen(username) {
   var stringToJsonObject = JSON.parse(arrayToString);
   if (Object.keys(stringToJsonObject).length == 0) {
     document.getElementsByClassName("home-span")[0].innerHTML = "WELL DONE 👏🏻";
-    document.getElementsByClassName("problemscreen")[0].innerHTML = getNoProblemMarkup();
+    document.getElementsByClassName(
+      "problemscreen"
+    )[0].innerHTML = getNoProblemMarkup();
   } else {
     var listItem = getProblemMarkup(stringToJsonObject);
     document.getElementsByClassName("problemscreen")[0].innerHTML = listItem;
@@ -290,20 +304,93 @@ function getProblemMarkup(jsonobj) {
   var txt = "<ul class='problemitems'>";
   var obj;
   for (obj in jsonobj) {
-    if(jsonobj[obj].problemLevel == 'Easy') {
-      txt += "<li class='list-item'>" + '<span class="label label-success round">Easy</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
-    }else if(jsonobj[obj].problemLevel == 'Medium'){
-      txt += "<li class='list-item'>" + '<span class="label label-warning round">Medium</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
-    }else if(jsonobj[obj].problemLevel == 'Hard'){
-      txt += "<li class='list-item'>" + '<span class="label label-danger round">Hard</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
+    if (jsonobj[obj].problemLevel == "Easy") {
+      txt +=
+        "<li class='list-item'>" +
+        '<span class="label label-success round">Easy</span>' +
+        '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' +
+        jsonobj[obj].problemDescription.toLowerCase().replace(/ /g, "-") +
+        ">" +
+        jsonobj[obj].problemDescription +
+        "</a>" +
+        "<br" +
+        "</li>";
+    } else if (jsonobj[obj].problemLevel == "Medium") {
+      txt +=
+        "<li class='list-item'>" +
+        '<span class="label label-warning round">Medium</span>' +
+        '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' +
+        jsonobj[obj].problemDescription.toLowerCase().replace(/ /g, "-") +
+        ">" +
+        jsonobj[obj].problemDescription +
+        "</a>" +
+        "<br" +
+        "</li>";
+    } else if (jsonobj[obj].problemLevel == "Hard") {
+      txt +=
+        "<li class='list-item'>" +
+        '<span class="label label-danger round">Hard</span>' +
+        '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' +
+        jsonobj[obj].problemDescription.toLowerCase().replace(/ /g, "-") +
+        ">" +
+        jsonobj[obj].problemDescription +
+        "</a>" +
+        "<br" +
+        "</li>";
     }
-
   }
   return txt;
 }
-function getNoProblemMarkup()
-{
-  var txt="<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break 💛</div>";
+function getNoProblemMarkup() {
+  var txt =
+    "<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break 💛</div>";
   return txt;
+}
+
+function getProblemDescription(
+  problemNumber,
+  problemDescription,
+  problemLevel
+) {
+  var txt;
+  if (problemLevel == "Easy")
+    return (
+      '<div><span class="label label-success round">' +
+      problemLevel +
+      "</span>" +
+      "<span>" +
+      problemNumber +
+      "</span></div>" +
+      "</span>" +
+      "<span>" +
+      problemDescription +
+      "</span>"
+    );
+  else if (problemLevel == "Medium")
+    return (
+      '<div><span class="label label-warning round">' +
+      problemLevel +
+      "</span>" +
+      "<span>" +
+      problemNumber +
+      "</span></div>" +
+      "</span>" +
+      "<span>" +
+      problemDescription +
+      "</span>"
+    );
+  else
+    return (
+      '<div><span class="label label-danger round">' +
+      problemLevel +
+      "</span>" +
+      "<span>" +
+      problemNumber +
+      "</span></div>" +
+      "</span>" +
+      "<span>" +
+      problemDescription +
+      "</span>"
+    );
 }
 window.onload = onWindowLoad;

@@ -260,15 +260,14 @@ function generateHomeScreen(username) {
   upperLimit.setHours(upperLimit.getHours() + 30);
   upperLimit = upperLimit.toISOString();
   var arr = alasql(
-    "SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? AND problemUsername = ? LIMIT 10",
+    "SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? AND problemUsername = ? LIMIT 5",
     [lowerLimit, upperLimit, username]
   );
   var arrayToString = JSON.stringify(Object.assign({}, arr));
   var stringToJsonObject = JSON.parse(arrayToString);
   if (Object.keys(stringToJsonObject).length == 0) {
-    console.log(
-      "Set the content inside the div to Well Done! No questions to revisit today. Do some more or take a break!"
-    );
+    document.getElementsByClassName("home-span")[0].innerHTML = "WELL DONE 👏🏻";
+    document.getElementsByClassName("problemscreen")[0].innerHTML = getNoProblemMarkup();
   } else {
     var listItem = getProblemMarkup(stringToJsonObject);
     document.getElementsByClassName("problemscreen")[0].innerHTML = listItem;
@@ -298,6 +297,11 @@ function getProblemMarkup(jsonobj) {
     }
 
   }
+  return txt;
+}
+function getNoProblemMarkup()
+{
+  var txt="<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break!</div>";
   return txt;
 }
 window.onload = onWindowLoad;

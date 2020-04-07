@@ -301,7 +301,7 @@ function getProblemMarkup(jsonobj) {
 }
 function getNoProblemMarkup()
 {
-  var txt="<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break!</div>";
+  var txt="<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break 💛</div>";
   return txt;
 }
 window.onload = onWindowLoad;

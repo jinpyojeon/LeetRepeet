@@ -55,12 +55,11 @@ function onWindowLoad() {
                       );
                     });
                   }
-                );
+                ).catch(function (err) {
+                  console.log("Fetch Error :-S", err);
+                });
               }
             )
-            .catch(function (err) {
-              console.log("Fetch Error :-S", err);
-            });
         } else {
           document.getElementsByClassName("problems")[0].style.display = "none";
           chrome.runtime.onMessage.addListener(function (request, sender) {

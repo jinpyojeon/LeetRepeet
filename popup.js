@@ -41,23 +41,21 @@ function onWindowLoad() {
             var username = "";
             if (request.action === "getSource") {
               message.innerText = request.source;
-              const re = /^(.+?)\//;
+              const re = /^(.+?)\',/;
               try {
                 username = re
                   .exec(
                     message.innerText.split(
-                      "https://assets.leetcode.com/users/"
+                      "userSlug:"
                     )[1]
-                  )[1]
+                  )[1].replace('\'',' ')
                   .trim()
                   .toString();
               } catch (err) {
-                console.log("Display ui asking to login to this website");
                 document.getElementsByClassName("extension")[0].style.display =
                   "none";
               }
             }
-            console.log(username);
             if (username != "") {
               document.getElementsByClassName(
                 "loginErrorWrapper"

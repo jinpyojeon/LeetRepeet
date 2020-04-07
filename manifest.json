@@ -5,8 +5,7 @@
   "permissions": [
     "storage",
     "declarativeContent",
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ],
   "background": {
     "scripts": ["background.js"],

@@ -429,7 +429,7 @@ function myFunction(event) {
   var x = event.target.id;
   switch (x) {
     case "3":
-      problemDate = new Date().addDays(3);
+      problemDate = new Date().addDays(-1);
       break;
     case "7":
       problemDate = new Date().addDays(7);

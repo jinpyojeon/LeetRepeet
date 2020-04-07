@@ -22,42 +22,48 @@ function onWindowLoad() {
               },
               (results) => {
                 results = results.toString();
-                var problemNumber = determineProblemNumber(results);
-                var problemDescription = determineProblemDescription(results);
-                var problemLevel = determineProblemLevel(results);
-                var problemDate = new Date().addDays(-1);
-                document.getElementsByClassName("problemHeader")[0].innerHTML =
-                  '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b>';
-                document.getElementsByClassName(
-                  "problemDescription"
-                )[0].innerHTML = getProblemDescription(
-                  problemNumber,
-                  problemDescription,
-                  problemLevel
-                );
-                fetch("https://leetcode.com/api/problems/algorithms/").then(
-                  function (response) {
-                    if (response.status !== 200) {
-                      console.log(
-                        "Looks like there was a problem. Status Code: " +
-                          response.status
-                      );
-                      return;
-                    }
-                    response.json().then(function (data) {
-                      var problemUsername = data.user_name.toString();
-                      dbstuff(
-                        problemUsername,
-                        problemNumber,
-                        problemLevel,
-                        problemDescription,
-                        problemDate
-                      );
-                    });
-                  }
-                ).catch(function (err) {
-                  console.log("Fetch Error :-S", err);
-                });
+                if(results.includes("Sign up"))
+                {
+                  document.getElementsByClassName("problems")[0].style.display = "none";
+                  document.getElementsByClassName("loginErrorWrapper")[0].style.display = "block";
+                } else{
+                  var problemNumber = determineProblemNumber(results);
+                  var problemDescription = determineProblemDescription(results);
+                  var problemLevel = determineProblemLevel(results);
+                  var problemDate = new Date().addDays(-1);
+                  document.getElementsByClassName("problemHeader")[0].innerHTML =
+                      '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b>';
+                  document.getElementsByClassName(
+                      "problemDescription"
+                  )[0].innerHTML = getProblemDescription(
+                      problemNumber,
+                      problemDescription,
+                      problemLevel
+                  );
+                  fetch("https://leetcode.com/api/problems/algorithms/").then(
+                      function (response) {
+                        if (response.status !== 200) {
+                          console.log(
+                              "Looks like there was a problem. Status Code: " +
+                              response.status
+                          );
+                          return;
+                        }
+                        response.json().then(function (data) {
+                          var problemUsername = data.user_name.toString();
+                          dbstuff(
+                              problemUsername,
+                              problemNumber,
+                              problemLevel,
+                              problemDescription,
+                              problemDate
+                          );
+                        });
+                      }
+                  ).catch(function (err) {
+                    console.log("Fetch Error :-S", err);
+                  });
+                }
               }
             )
         } else {
@@ -102,8 +108,7 @@ function onWindowLoad() {
         }
       } else {
         changeIcon2();
-        document.getElementsByClassName("loginErrorWrapper")[0].style.display =
-          "none";
+        document.getElementsByClassName("loginErrorWrapper")[0].style.display = "none";
         document.getElementsByClassName("home")[0].style.display = "none";
         document.getElementsByClassName("problems")[0].style.display = "none";
       }
@@ -392,4 +397,5 @@ function getProblemDescription(
       "</span>"
     );
 }
+
 window.onload = onWindowLoad;

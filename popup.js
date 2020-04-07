@@ -41,23 +41,21 @@ function onWindowLoad() {
             var username = "";
             if (request.action === "getSource") {
               message.innerText = request.source;
-              const re = /^(.+?)\//;
+              const re = /^(.+?)\',/;
               try {
                 username = re
                   .exec(
                     message.innerText.split(
-                      "https://assets.leetcode.com/users/"
+                      "userSlug:"
                     )[1]
-                  )[1]
+                  )[1].replace('\'',' ')
                   .trim()
                   .toString();
               } catch (err) {
-                console.log("Display ui asking to login to this website");
                 document.getElementsByClassName("extension")[0].style.display =
                   "none";
               }
             }
-            console.log(username);
             if (username != "") {
               document.getElementsByClassName(
                 "loginErrorWrapper"
@@ -265,13 +263,11 @@ function generateHomeScreen(username) {
     "SELECT * FROM Information WHERE problemDate > ? AND problemDate < ? AND problemUsername = ? LIMIT 5",
     [lowerLimit, upperLimit, username]
   );
-  var arrayToString = JSON.stringify(Object.assign({}, arr)); // convert array to string
-  var stringToJsonObject = JSON.parse(arrayToString); // convert string to json object
-  console.log(Object.keys(stringToJsonObject).length);
+  var arrayToString = JSON.stringify(Object.assign({}, arr));
+  var stringToJsonObject = JSON.parse(arrayToString);
   if (Object.keys(stringToJsonObject).length == 0) {
-    console.log(
-      "Set the content inside the div to Well Done! No questions to revisit today. Do some more or take a break!"
-    );
+    document.getElementsByClassName("home-span")[0].innerHTML = "WELL DONE 👏🏻";
+    document.getElementsByClassName("problemscreen")[0].innerHTML = getNoProblemMarkup();
   } else {
     var listItem = getProblemMarkup(stringToJsonObject);
     document.getElementsByClassName("problemscreen")[0].innerHTML = listItem;
@@ -292,8 +288,20 @@ function getProblemMarkup(jsonobj) {
   var txt = "<ul class='problemitems'>";
   var obj;
   for (obj in jsonobj) {
-    txt += "<li>" + jsonobj[obj].problemDescription + "</li>";
+    if(jsonobj[obj].problemLevel == 'Easy') {
+      txt += "<li class='list-item'>" + '<span class="label label-success round">Easy</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
+    }else if(jsonobj[obj].problemLevel == 'Medium'){
+      txt += "<li class='list-item'>" + '<span class="label label-warning round">Medium</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
+    }else if(jsonobj[obj].problemLevel == 'Hard'){
+      txt += "<li class='list-item'>" + '<span class="label label-danger round">Hard</span>' + '<a class="anchor-tag" target="_blank" href=https://leetcode.com/problems/' + jsonobj[obj].problemDescription.toLowerCase().replace(/ /g,'-') + ">" + jsonobj[obj].problemDescription + '</a>' + "<br"+"</li>";
+    }
+
   }
+  return txt;
+}
+function getNoProblemMarkup()
+{
+  var txt="<br> <div>No problems to revisit today.</div> <br> <div>Do some new ones or take a break 💛</div>";
   return txt;
 }
 window.onload = onWindowLoad;

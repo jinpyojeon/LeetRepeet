@@ -1,20 +1,26 @@
 #message {
   display: none;
 }
-.logo{
+.logo {
   float: right;
 }
-.other b{font-size: 14px}
-.loginErrorWrapper b{font-size: 14px}
-.home{
-   width: max-content;
-   height: max-content
- }
-.problems{
-  width: max-content;
-  height: max-content
+.other b {
+  font-size: 14px;
 }
-.home b{font-size: 16px}
+.loginErrorWrapper b {
+  font-size: 14px;
+}
+.home {
+  width: max-content;
+  height: max-content;
+}
+.problems {
+  width: max-content;
+  height: max-content;
+}
+.home b {
+  font-size: 16px;
+}
 .home-span {
   padding-top: 6px;
   font-size: 14px;
@@ -31,7 +37,7 @@
 }
 .label {
   display: inline;
-  padding: .2em .6em .3em;
+  padding: 0.2em 0.6em 0.3em;
   font-size: 75%;
   font-weight: 700;
   line-height: 1;
@@ -44,65 +50,68 @@
 .label-danger {
   background-color: #d9534f;
 }
-.list-item{
+.list-item {
   padding: 8px;
 }
-.anchor-tag{
+.anchor-tag {
   color: #08c;
-  text-decoration: none;}
-ul{
-  list-style: none
+  text-decoration: none;
 }
-.problemitems{
+ul {
+  list-style: none;
+}
+.problemitems {
   padding-left: 5px;
 }
-.problemNumber{
+.problemNumber {
   font-weight: bold;
   font-size: 15px;
 }
-.problemLevel{
+.problemLevel {
   padding-bottom: 12px;
 }
-strong{
-  color: #FCC201;
+strong {
+  color: #fcc201;
 }
-.problemDescription strong{
+.problemDescription strong {
   font-size: 16px;
 }
 .butt {
-   border: 1px outset black;
-   background-color: #FCC201;
-   height:40px;
-   width:40px;
-   cursor:pointer;
- }
+  border: 1px outset black;
+  background-color: #fcc201;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
 .butt1 {
   border: 1px outset black;
   background-color: black;
-  height:40px;
-  width:40px;
-  cursor:pointer;
-  color:white;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  color: white;
 }
 .butt1:hover {
-  background-color: #FCC201;
-  color:black;
+  background-color: #fcc201;
+  color: black;
 }
 .butt:hover {
   background-color: black;
-  color:white;
+  color: white;
 }
-.buttonHeader{
+.buttonHeader {
   font-size: 14px;
   font-weight: 500;
 }
-.closeHeader{
+.closeHeader {
   padding-top: 12px;
   font-size: 14px;
   font-weight: 500;
 }
-.pad{margin-top: 12px;
-margin-left: 65px}
-.Heading{
+.pad {
+  margin-top: 12px;
+  margin-left: 65px;
+}
+.Heading {
   font-size: 16px;
 }

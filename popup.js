@@ -1,6 +1,6 @@
 var problemDate;
-var parent = document.getElementById('buttons');
-parent.addEventListener('click', myFunction);
+var parent = document.getElementById("buttons");
+parent.addEventListener("click", myFunction);
 function onWindowLoad() {
   chrome.tabs.query(
     {
@@ -34,7 +34,9 @@ function onWindowLoad() {
                 var problemNumber = determineProblemNumber(results);
                 var problemDescription = determineProblemDescription(results);
                 var problemLevel = determineProblemLevel(results);
-                document.getElementsByClassName("problemHeader")[0].innerHTML = getProblemHeader();
+                document.getElementsByClassName(
+                  "problemHeader"
+                )[0].innerHTML = getProblemHeader();
                 document.getElementsByClassName(
                   "problemDescription"
                 )[0].innerHTML = getProblemDescription(
@@ -53,18 +55,19 @@ function onWindowLoad() {
                     }
                     response.json().then(function (data) {
                       var problemUsername = data.user_name.toString();
-                      (async() => {
-                        while(typeof problemDate == "undefined")
-                        {
-                          await new Promise(resolve => setTimeout(resolve, 1000));
-                        }
-                          dbstuff(
-                              problemUsername,
-                              problemNumber,
-                              problemLevel,
-                              problemDescription,
-                              problemDate
+                      (async () => {
+                        while (typeof problemDate == "undefined") {
+                          await new Promise((resolve) =>
+                            setTimeout(resolve, 1000)
                           );
+                        }
+                        dbstuff(
+                          problemUsername,
+                          problemNumber,
+                          problemLevel,
+                          problemDescription,
+                          problemDate
+                        );
                       })();
                     });
                   })
@@ -203,32 +206,32 @@ function insertData(
   problemDescription,
   problemDate
 ) {
-  if(problemDate == "x")
-  {
-    var output=alasql(
-        "DELETE FROM Information WHERE problemUsername = ? AND problemNumber = ?",
-        [problemUsername, problemNumber]);
+  if (problemDate == "x") {
+    var output = alasql(
+      "DELETE FROM Information WHERE problemUsername = ? AND problemNumber = ?",
+      [problemUsername, problemNumber]
+    );
     console.log(alasql("SELECT * FROM Information"));
-  } else{
+  } else {
     var ifExists = alasql(
-        "SELECT VALUE COUNT(*) FROM Information WHERE problemUsername = ? AND problemNumber = ?",
-        [problemUsername, problemNumber]
+      "SELECT VALUE COUNT(*) FROM Information WHERE problemUsername = ? AND problemNumber = ?",
+      [problemUsername, problemNumber]
     );
     if (ifExists > 0) {
       updateRecord(
-          problemUsername,
-          problemNumber,
-          problemLevel,
-          problemDescription,
-          problemDate
+        problemUsername,
+        problemNumber,
+        problemLevel,
+        problemDescription,
+        problemDate
       );
     } else {
       insertNewRecord(
-          problemUsername,
-          problemNumber,
-          problemLevel,
-          problemDescription,
-          problemDate
+        problemUsername,
+        problemNumber,
+        problemLevel,
+        problemDescription,
+        problemDate
       );
     }
     console.log(alasql("SELECT * FROM Information"));
@@ -411,26 +414,27 @@ function getProblemDescription(
       "</strong>"
     );
 }
-function getProblemHeader(){
+function getProblemHeader() {
   return '<img class="logo" src="images/32x32dark.png"/> <b class="Heading">Time to <strong>REPEET</strong> 💪</b>';
 }
 
 function myFunction(event) {
   var x = event.target.id;
   switch (x) {
-    case '3':
+    case "3":
       problemDate = new Date().addDays(3);
       break;
-    case '7':
+    case "7":
       problemDate = new Date().addDays(7);
       break;
-    case '15':
+    case "15":
       problemDate = new Date().addDays(15);
       break;
-    case '30':
+    case "30":
       problemDate = new Date().addDays(30);
       break;
-    case '0': problemDate = "x";
+    case "0":
+      problemDate = "x";
       break;
   }
 }

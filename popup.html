@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html style="height: 396px; width: 350px;">
+<html>
   <head>
     <script src="popup.js"></script>
     <script src="https://cdn.jsdelivr.net/alasql/0.2/alasql.min.js"></script>
     <link href="popup.css" rel="stylesheet" />
   </head>
-  <body style="width: 350px;">
+  <body>
     <div class="outerWrapper">
       <div class="extension">
         <div class="home">
@@ -13,8 +13,13 @@
           <div id="message" class="homepage"></div>
           Display the problems to do UI
         </div>
-        <div class="other">
-          This extension only works on leetcode.com
+        <div class="other" style="height: 34px;width: 410px">
+          <img class="logo" src="images/32x32light.png"/>
+          <p>
+            <b>This extension only works on leetcode.com</b>
+            <br>
+            Please go to <a href="https://leetcode.com" target="_blank">leetcode.com</a> and sign in :).
+          </p>
         </div>
         <div class="problems">
           Add problem screen UI

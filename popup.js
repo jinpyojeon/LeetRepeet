@@ -24,6 +24,8 @@ function onWindowLoad() {
               var problemNumber = determineProblemNumber(results);
               var problemDescription = determineProblemDescription(results);
               var problemLevel = determineProblemLevel(results);
+              document.getElementsByClassName("problemHeader")[0].innerHTML = '<img class="logo" src="images/48x48dark.png"/> <b>Time to <strong>REPEET</strong> 💪</b> <br>';
+              document.getElementsByClassName("problemDescription")[0].innerHTML = problemLevel;
               var problemUsername = determineProblemUsername();
               var problemDate = new Date().addDays(-1);
               dbstuff(
@@ -113,7 +115,7 @@ function determineProblemLevel(results) {
 function determineProblemUsername(results) {
   var xhr = new XMLHttpRequest();
 
-  xhr.open("GET", "https://leetcode.com/api/problems/algorithms/", false);
+  xhr.open("GET", "https://leetcode.com/api/problems/algorithms/", true);
   xhr.send();
 
   var result = JSON.parse(xhr.responseText);

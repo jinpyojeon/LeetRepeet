@@ -1,11 +1,12 @@
 {
   "name": "LeetRepeet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Spaced Repetition for better problem retention and memory on leetcode.com",
   "permissions": [
     "storage",
     "declarativeContent",
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ],
   "background": {
     "scripts": ["background.js"],

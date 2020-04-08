@@ -6,7 +6,8 @@
     "storage",
     "declarativeContent",
     "tabs",
-    "<all_urls>"
+    "https://leetcode.com/",
+    "activeTab"
   ],
   "background": {
     "scripts": ["background.js"],

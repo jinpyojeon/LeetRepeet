@@ -1,7 +1,7 @@
 {
-  "name": "LeetRepeet",
-  "version": "1.0.1",
-  "description": "Spaced Repetition for better problem retention and memory on leetcode.com",
+  "name": "Leet Repeet",
+  "version": "1.0.2",
+  "description": "Spaced Repetition for better problem retention and memory on leetcode.com to prepare and crack coding interviews",
   "permissions": [
     "storage",
     "declarativeContent",
@@ -28,6 +28,6 @@
       "128": "images/128x128dark.png"
     }
   },
-  "content_security_policy": "script-src 'self' https://cdn.jsdelivr.net/alasql/0.2/alasql.min.js 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdn.jsdelivr.net/alasql/0.2/alasql.min.js 'unsafe-eval'; object-src 'self'",
   "manifest_version": 2
 }
